@@ -1,30 +1,42 @@
-from math import *
+import math
+import sys
 
-def distance(a , b):
-    return sqrt((a[0]-b[0])**2+(a[1]-b[1])**2)
+def get_dist_to_slope_line(x, y, angle):
+    if abs(math.cos(angle)) < 1e-12:
+        return abs(x)
+    m = math.tan(angle)
+    return abs(m * x - y) / math.sqrt(m**2 + 1)
 
-def compute_value(a , x , y):
-    return a[0]*x+a[1]*y
-
-def solve(rx , ry , r , x , y):
-    r_angle = atan2(ry , rx)
-    r1 = distance([0 , 0] , [rx , ry])
-    if distance([0 , 0] , [x , y]) <= r1:return 0.000
-    plus_angle = asin(r / r1)
-    m1 = tan(r_angle + plus_angle)
-    m2 = tan(r_angle - plus_angle)
-    result1 = compute_value([m1 , -1] , x , y)
-    result2 = compute_value([m2 , -1] , x , y)
-    if result1*result2 > 0:
-        return 0.000
-    else:
-        return min(compute_value([m1 , -1] , x , y)/sqrt(m1**2+1**2), compute_value([m2 , -1] , x , y)/sqrt(m2**2+1**2))
-
-def main():
-    n = int(input())
+def solve():
+    input_data = sys.stdin.read().split()
+    if not input_data: return
+    
+    n = int(input_data[0])
+    ptr = 1
     for _ in range(n):
-        rx , ry , r , x , y = map(float , input().split())
-        print(f"{solve(rx , ry , r , x , y):.3f}")
+        rx, ry, r, x, y = map(float, input_data[ptr:ptr+5])
+        ptr += 5
+        
+        d_house = math.hypot(x, y)
+        d_tree = math.hypot(rx, ry)
+        dist_to_line = abs(rx * y - ry * x) / d_house
+        proj = (rx * x + ry * y) / d_house
+        is_safe = (dist_to_line <= r) and (0 < proj < d_house)
+        
+        if not is_safe:
+            print("0.000")
+            continue
+            
+        r_angle = math.atan2(ry, rx)
+        plus_angle = math.asin(r / d_tree)
+        
+        dist1 = get_dist_to_slope_line(x, y, r_angle + plus_angle)
+        dist2 = get_dist_to_slope_line(x, y, r_angle - plus_angle)
+        
+        dist_to_tree_surface = math.hypot(x - rx, y - ry) - r
+        
+        result = min(dist1, dist2, dist_to_tree_surface)
+        print(f"{max(0.0, result):.3f}")
 
 if __name__ == "__main__":
-    main()
+    solve()
