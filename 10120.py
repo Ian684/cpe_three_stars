@@ -9,6 +9,7 @@ def bfs(n , m):
     while q:
         position , step = q.popleft()
         
+        if position == m:return True
         next_step = step + 2
         left = position - step
         right = position + step
@@ -16,7 +17,7 @@ def bfs(n , m):
         if left == m or right == m:
             return True
 
-        if left >= 0 and (left , next_step) not in check:
+        if left > 0 and (left , next_step) not in check:
             check.add((left , next_step))
             q.append([left , next_step])
         if right <= n and (right , next_step) not in check:
