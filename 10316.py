@@ -11,6 +11,7 @@ def change_to_xyz(a , b):
     return x , y , z
 
 def main():
+    eps = 1e-10
     while True:
         try:
             n = int(input())
@@ -33,8 +34,10 @@ def main():
                 nx , ny , nz = ps[j]
 
                 now = max(now , (nx-x)**2 + (ny-y)**2 + (nz-z)**2)
-            if now < mn:
+            if now < mn - eps:
                 mn = now
+                ans = temp[i]
+            elif abs(now - mn) <= eps:
                 ans = temp[i]
         print(f"{ans[0]:.2f} {ans[1]:.2f}")
 
