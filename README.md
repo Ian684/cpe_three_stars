@@ -2,6 +2,9 @@
 
 Python solutions for CPE three-star programming problems. This repository focuses on more advanced competitive programming problems and algorithmic practice.
 
+See [INDEX.md](INDEX.md) for the source counts, alternate-version guidance,
+and advanced-problem review checklist.
+
 Reference problem list:
 
 - https://par.cse.nsysu.edu.tw/~advprog/star.php
